@@ -4,6 +4,7 @@ import com.tension.entity.Article;
 import com.tension.entity.User;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -51,5 +52,18 @@ public interface ArticleDao {
      * @param username
      * @return
      */
-    List<Article> queryAllArticleByUsername(String username);
+    List<Article> queryByUsername(String username) ;
+
+    /**
+     * 查询所有博文
+     * @return
+     */
+    List<Article> queryAll();
+
+    /**
+     * 通过博文id查询博文
+     * @param articleId
+     * @return
+     */
+    Article queryArticleById(int articleId);
 }

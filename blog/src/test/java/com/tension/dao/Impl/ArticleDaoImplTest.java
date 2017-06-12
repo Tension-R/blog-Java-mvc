@@ -12,6 +12,8 @@ import java.util.zip.ZipEntry;
  * Created by tension on 17-6-10.
  */
 public class ArticleDaoImplTest extends TestCase {
+    public void testGetArticleList() throws Exception {
+    }
 
     private ArticleDao articleDao = new ArticleDaoImpl();
 
@@ -48,4 +50,21 @@ public class ArticleDaoImplTest extends TestCase {
         System.out.println(articleList);
     }
 
+    public void testQueryAllArticleByUsername() throws Exception {
+
+        String username = "zhang";
+        List<Article> articleList = articleDao.queryByUsername(username);
+        System.out.println(articleList);
+    }
+
+    public void testQueryAll() throws Exception {
+        List<Article> articleList = articleDao.queryAll();
+        System.out.println(articleList);
+    }
+
+    public void testQueryArticleByID(){
+        int id = 1;
+        Article article = articleDao.queryArticleById(id);
+        System.out.println(article);
+    }
 }

@@ -5,10 +5,21 @@ package com.tension.entity;
  * Created by tension on 17-6-9.
  */
 public class User {
+
     private String username;
     private String password;
     private int sex;
     private long telephone;
+
+    public User() {
+    }
+
+    public User(String username, String password, int sex, long telephone) {
+        this.username = username;
+        this.password = password;
+        this.sex = sex;
+        this.telephone = telephone;
+    }
 
     public String getUsername() {
         return username;

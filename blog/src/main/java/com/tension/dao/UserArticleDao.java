@@ -2,6 +2,7 @@ package com.tension.dao;
 
 import com.tension.entity.Article;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -18,5 +19,5 @@ public interface UserArticleDao {
      * @param articleId
      * @return
      */
-    int insertArticleAndUser(String username, int articleId);
+    int insertArticleAndUser(String username, int articleId) throws SQLException;
 }

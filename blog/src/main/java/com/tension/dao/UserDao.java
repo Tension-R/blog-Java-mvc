@@ -13,11 +13,10 @@ public interface UserDao {
 
     /**
      * 添加用户
-     * @param username
-     * @param password
+     * @param user
      * @return
      */
-    int insertUser(String username, String password, int sex, long telephone);
+    int insertUser(User user) throws SQLException;
 
     /**
      * 删除用户
@@ -32,7 +31,7 @@ public interface UserDao {
      * @param telephone
      * @return
      */
-    int updateUserTelephone(String username,long telephone);
+    int updateUserTelephone(String username,long telephone) throws SQLException;
 
     /**
      * 修改用户性别
@@ -40,12 +39,12 @@ public interface UserDao {
      * @param sex
      * @return
      */
-    int updateUserSex(String username, int sex);
+    int updateUserSex(String username, int sex) throws SQLException;
 
     /**
      * 按用户名模糊查询用户
      * @param username
      * @return
      */
-    List<User> queryByName(String username);
+    List<User> queryByName(String username) throws SQLException;
 }

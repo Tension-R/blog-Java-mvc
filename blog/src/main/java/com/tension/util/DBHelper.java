@@ -9,29 +9,27 @@ import java.sql.SQLException;
  */
 public class DBHelper {
     //数据库信息
-    private static final String driver = "com.mysql.jdbc.Driver";
-    private static final String url = "jdbc:mysql://127.0.0.1/blog?useUnicode=true&characterEncoding=utf8";
-    private static final String usename = "root";
-    private static final String password = "root";
+    private final String driver = "com.mysql.jdbc.Driver";
+    private final String url = "jdbc:mysql://127.0.0.1/blog?useUnicode=true&characterEncoding=utf8";
+    private final String username = "root";
+    private final String password = "root";
     //数据库连接
-    private static Connection conn = null;
-    //加载驱动
-    static {
+    private Connection conn = null;
+
+    /**
+     * 获取数据库连接
+     *
+     * @return
+     * @throws SQLException
+     */
+    public Connection getConnection() throws SQLException {
         try {
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 获取数据库连接
-     * @return
-     * @throws SQLException
-     */
-    public static Connection getConnection() throws SQLException {
-        if (conn == null){
-            conn = DriverManager.getConnection(url,usename,password);
+        if (conn == null) {
+            conn = DriverManager.getConnection(url, username, password);
             return conn;
         }
         return conn;

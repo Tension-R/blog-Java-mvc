@@ -12,11 +12,12 @@ import java.util.List;
 public class UserDaoImplTest extends TestCase {
     private UserDao userDao = new UserDaoImpl();
     public void testInsertUser() throws Exception {
-        String username = "ali";
-        String password = "188375";
+        String username = "zhao";
+        String password = "123425";
         int sex = 1;
-        long telephone = 18716235324l;
-        int x = userDao.insertUser(username,password,sex,telephone);
+        long telephone = 18712342324L;
+        User user = new User(username,password,sex,telephone);
+        int x = userDao.insertUser(user);
         System.out.println(x);
     }
 
@@ -28,7 +29,7 @@ public class UserDaoImplTest extends TestCase {
 
     public void testUpdateUserTelephone() throws Exception {
         String username = "li";
-        long telephone = 13824758237l;
+        long telephone = 13824758237L;
         int x = userDao.updateUserTelephone(username,telephone);
         System.out.println(x);
     }
