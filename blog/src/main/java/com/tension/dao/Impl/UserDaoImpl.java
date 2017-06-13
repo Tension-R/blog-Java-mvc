@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class UserDaoImpl implements UserDao {
 
-    public int insertUser(User user) throws SQLException {
+    public int insertUser(User user)   {
 
         String sql = "INSERT INTO user (`username`,`password`,`sex`,`telephone`) VALUES(?,?,?,?);";
         //影响的行数
@@ -31,12 +31,12 @@ public class UserDaoImpl implements UserDao {
             num = pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            //TODO
+            //用户名重复异常，在业务层中处理
         }
         return num;
     }
 
-    public int deleteUser(String username) throws SQLException {
+    public int deleteUser(String username)   {
 
         String sql = "delete from user where username = '" + username + "';";
         DBHelper dbHelper = new DBHelper();
@@ -51,7 +51,7 @@ public class UserDaoImpl implements UserDao {
         return num;
     }
 
-    public int updateUserTelephone(String username, long telephone) throws SQLException {
+    public int updateUserTelephone(String username, long telephone)   {
 
         String sql = "UPDATE user SET telephone = ? WHERE username = ?;";
         DBHelper dbHelper = new DBHelper();
@@ -70,7 +70,7 @@ public class UserDaoImpl implements UserDao {
         return num;
     }
 
-    public int updateUserSex(String username, int sex) throws SQLException {
+    public int updateUserSex(String username, int sex)   {
         String sql = "update user set sex = ? where username = ?;";
         DBHelper dbHelper = new DBHelper();
         int num = 0;
@@ -85,7 +85,7 @@ public class UserDaoImpl implements UserDao {
         return num;
     }
 
-    public List<User> queryByName(String username) throws SQLException {
+    public List<User> queryByName(String username)   {
 
         String sql = "SELECT * FROM user WHERE username LIKE '%" + username + "%'";
 
@@ -106,5 +106,43 @@ public class UserDaoImpl implements UserDao {
             e.printStackTrace();
         }
         return userList;
+    }
+
+    @Override
+    public User checkUser(String username, String password) {
+        String sql = "select * from user where username = ? and password = ?;";
+        DBHelper dbHelper = new DBHelper();
+        User user = new User();
+        try (Connection conn = dbHelper.getConnection()){
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,username);
+            pstmt.setString(2,password);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()){
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setSex(rs.getInt("sex"));
+                user.setTelephone(rs.getLong("telephone"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    @Override
+    public int updateUserUsername(String oldUsername, String username) {
+        String sql = "update user set username = ? where username = ?;";
+        DBHelper dbHelper = new DBHelper();
+        int num = 0;
+        try (Connection conn = dbHelper.getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,username);
+            pstmt.setString(2,oldUsername);
+            num = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            //用户名重复在业务中处理
+        }
+        return num;
     }
 }

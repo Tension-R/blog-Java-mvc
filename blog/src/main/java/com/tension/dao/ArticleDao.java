@@ -66,4 +66,12 @@ public interface ArticleDao {
      * @return
      */
     Article queryArticleById(int articleId);
+
+    /**
+     * 更新博文作者用户名
+     * @param oldUsername
+     * @param username
+     * @return
+     */
+    int updateArticleAuthor(String oldUsername, String username);
 }

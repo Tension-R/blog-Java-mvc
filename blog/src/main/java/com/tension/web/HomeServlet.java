@@ -30,8 +30,6 @@ public class HomeServlet extends HttpServlet {
         req.setCharacterEncoding("utf-8");
         resp.setContentType("text/html; charset=UTF-8");
 
-        PrintWriter writer = resp.getWriter();
-
         ArticleDao articleDao = new ArticleDaoImpl();
         //访问home页面时带的参数
         String action = req.getParameter("action");
@@ -42,11 +40,12 @@ public class HomeServlet extends HttpServlet {
                 //转发到登录界面
                 RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsps/login.jsp");
                 view.forward(req, resp);
-
             } else if (action.trim().equals("query")) {
                 //根据标题和作者调用查询方法
+                String title = req.getParameter("title");
+                String username = req.getParameter("author");
                 //TODO
-            }else if (action.trim().equals("detail")){
+            } else if (action.trim().equals("detail")) {
                 //进入博文详情页面
                 //获取博文id
                 String articleId = req.getParameter("articleId");
@@ -56,7 +55,7 @@ public class HomeServlet extends HttpServlet {
                 req.setAttribute("article", article);
                 //转发到details页面
                 RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsps/details.jsp");
-                view.forward(req,resp);
+                view.forward(req, resp);
             }
         } else {
             //第一次访问home页面

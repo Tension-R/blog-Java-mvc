@@ -10,6 +10,8 @@ import java.util.List;
  * Created by tension on 17-6-10.
  */
 public class UserDaoImplTest extends TestCase {
+
+
     private UserDao userDao = new UserDaoImpl();
     public void testInsertUser() throws Exception {
         String username = "zhao";
@@ -45,6 +47,18 @@ public class UserDaoImplTest extends TestCase {
         String username = "li";
         List<User> userList = userDao.queryByName(username);
         System.out.println(userList);
+    }
+    public void testCheckUser() throws Exception {
+        String username = "tension";
+        String password = "pasword";
+        User user = userDao.checkUser(username,password);
+        System.out.println(user);
+    }
+    public void testUpdateUserUsername() throws Exception {
+        String username = "hong";
+        String oldUsername = "ali";
+        int x = userDao.updateUserUsername(oldUsername,username);
+        System.out.println(x);
     }
 
 }

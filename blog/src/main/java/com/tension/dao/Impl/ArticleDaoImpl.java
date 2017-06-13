@@ -137,4 +137,20 @@ public class ArticleDaoImpl implements ArticleDao {
         }
         return article;
     }
+
+    @Override
+    public int updateArticleAuthor(String oldUsername, String username) {
+        String sql = "update article set author_username = ? where author_username = ?;";
+        DBHelper dbHelper = new DBHelper();
+        int x = 0;
+        try (Connection conn = dbHelper.getConnection()){
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(2,oldUsername);
+            pstmt.setString(1,username);
+            x = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return x;
+    }
 }
