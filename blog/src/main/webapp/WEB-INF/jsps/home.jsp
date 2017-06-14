@@ -15,13 +15,11 @@
             width: 200px;
             height: 50px;
         }
-
     </style>
     <script type="text/javascript">
         function go(tag) {
             window.open("/home?action=detail&articleId=" + tag.id);
         }
-
     </script>
 </head>
 <body>
@@ -36,18 +34,20 @@
             <span><a href="/user?action=quit">退出</a></span>
         </c:when>
         <c:when test="${sessionScope.user.username == null}">
-            <a href="/home?action=login ">登录</a>
+            <a href="/home?action=login">登录</a>
         </c:when>
     </c:choose>
 </div>
-
 
 <div style="text-align:center;">
     <form action="/home?action=query" method="post">
         <input type="text" name="title"  placeholder="标题">
         <input type="text" name="author" placeholder="作者">
-        <input type="submit" value="查找">
+        <input type="submit" value="查找" >
     </form>
+</div>
+<div align="center">
+    <a href="/article?action=add">新建博文</a>
 </div>
 <div align="center">
     <table style="text-align: center; border: solid">

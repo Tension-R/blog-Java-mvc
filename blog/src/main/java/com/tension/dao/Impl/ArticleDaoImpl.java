@@ -153,4 +153,28 @@ public class ArticleDaoImpl implements ArticleDao {
         }
         return x;
     }
+
+    @Override
+    public List<Article> queryArticleByTitleAndAuthor(String title, String username) {
+        String sql = "select * from article where title like '%" + title + "%' and author_username = ?;";
+        DBHelper dbHelper = new DBHelper();
+        List<Article> articleList = new ArrayList<>();
+        try (Connection conn = dbHelper.getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Article article = new Article();
+                article.setTitle(rs.getString("title"));
+                article.setId(rs.getInt("id"));
+                article.setContent(rs.getString("content"));
+                article.setDate(rs.getDate("date"));
+                article.setUsername(rs.getString("author_username"));
+                articleList.add(article);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return articleList;
+    }
 }

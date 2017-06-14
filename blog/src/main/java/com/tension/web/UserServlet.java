@@ -88,27 +88,32 @@ public class UserServlet extends HttpServlet {
                 //重定向到主页
                 resp.sendRedirect("/home");
             } else if (action.trim().equals("add")) {
-                //注册后添加用户
-                //获取参数
-                String username = req.getParameter("username");
-                String password = req.getParameter("password");
-                String sex = req.getParameter("sex");
-                String telephone = req.getParameter("telephone");
-                User newUser = new User(username, password, Integer.parseInt(sex), Long.parseLong(telephone));
-                //执行数据库添加操作，返回影响的行数
-                int x = userDao.insertUser(newUser);
-                if (x > 0) {
-                    //添加成功
-                    session = req.getSession();
-                    session.setAttribute("user", newUser);
-                    //转发到用户个人信息页面user.jsp
-                    req.getRequestDispatcher("/WEB-INF/jsps/user.jsp").forward(req, resp);
+                //如果直接通过url访问/user?actoin=add 重定向到登录界面
+                if (user == null){
+                    resp.sendRedirect("/home?action=login");
                 }else {
-                    //添加失败
-                    //用户名已存在，抛出异常
-                    req.setAttribute("repeat",true);
-                    //转发到注册界面
-                    req.getRequestDispatcher("/WEB-INF/jsps/register.jsp").forward(req, resp);
+                    //注册添加用户
+                    //获取参数
+                    String username = req.getParameter("username");
+                    String password = req.getParameter("password");
+                    String sex = req.getParameter("sex");
+                    String telephone = req.getParameter("telephone");
+                    User newUser = new User(username, password, Integer.parseInt(sex), Long.parseLong(telephone));
+                    //执行数据库添加操作，返回影响的行数
+                    int x = userDao.insertUser(newUser);
+                    if (x > 0) {
+                        //添加成功
+                        //session = req.getSession();
+                        session.setAttribute("user", newUser);
+                        //转发到用户个人信息页面user.jsp
+                        req.getRequestDispatcher("/WEB-INF/jsps/user.jsp").forward(req, resp);
+                    } else {
+                        //添加失败
+                        //用户名已存在，抛出异常
+                        req.setAttribute("repeat", true);
+                        //转发到注册界面
+                        req.getRequestDispatcher("/WEB-INF/jsps/register.jsp").forward(req, resp);
+                    }
                 }
             } else if (action.trim().equals("change")) {
                 //修改个人信息
@@ -186,7 +191,10 @@ public class UserServlet extends HttpServlet {
                     req.getRequestDispatcher("/WEB-INF/jsps/user.jsp").forward(req,resp);
                 }
             }
-
+        }else {
+            //直接访问/user
+            //转发到登录页面
+            req.getRequestDispatcher("/WEB-INF/jsps/login.jsp").forward(req,resp);
         }
     }
 }

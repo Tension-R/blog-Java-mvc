@@ -74,4 +74,11 @@ public class ArticleDaoImplTest extends TestCase {
         int x = articleDao.updateArticleAuthor(oldUsername,username);
         System.out.println(x);
     }
+
+    public void testQueryArticleByTitleAndAuthor() throws Exception {
+        String username = "tension";
+        String title = "a";
+        List<Article> articleList = articleDao.queryArticleByTitleAndAuthor(title,username);
+        System.out.println(articleList);
+    }
 }

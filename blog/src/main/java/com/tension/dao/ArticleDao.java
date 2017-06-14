@@ -74,4 +74,12 @@ public interface ArticleDao {
      * @return
      */
     int updateArticleAuthor(String oldUsername, String username);
+
+    /**
+     * 通过标题和作者联合查询博文
+     * @param title
+     * @param username
+     * @return
+     */
+    List<Article> queryArticleByTitleAndAuthor(String title, String username);
 }

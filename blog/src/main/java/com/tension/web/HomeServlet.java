@@ -2,7 +2,10 @@ package com.tension.web;
 
 import com.tension.dao.ArticleDao;
 import com.tension.dao.Impl.ArticleDaoImpl;
+import com.tension.dao.Impl.UserDaoImpl;
+import com.tension.dao.UserDao;
 import com.tension.entity.Article;
+import com.tension.entity.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,6 +33,7 @@ public class HomeServlet extends HttpServlet {
         req.setCharacterEncoding("utf-8");
         resp.setContentType("text/html; charset=UTF-8");
 
+        UserDao userDao = new UserDaoImpl();
         ArticleDao articleDao = new ArticleDaoImpl();
         //访问home页面时带的参数
         String action = req.getParameter("action");
@@ -44,7 +48,36 @@ public class HomeServlet extends HttpServlet {
                 //根据标题和作者调用查询方法
                 String title = req.getParameter("title");
                 String username = req.getParameter("author");
-                //TODO
+                if ((!"".equals(title.trim())) && (!"".equals(username.trim()))) {
+                    //title和username都不是空
+                    //获取查到的博文列表
+                    List<Article> articleList = articleDao.queryArticleByTitleAndAuthor(title,username);
+                    req.setAttribute("articleList",articleList);
+
+                    req.getRequestDispatcher("/WEB-INF/jsps/query.jsp").forward(req,resp);
+                } else if (!"".equals(title.trim())) {
+                    //title不是空 username是空
+                    //获取查到的博文列表
+                    List<Article> articleList = articleDao.queryByTitle(title);
+
+                    req.setAttribute("articleList", articleList);
+                    req.setAttribute("userList",null);
+                    req.getRequestDispatcher("/WEB-INF/jsps/query.jsp").forward(req, resp);
+
+                } else if (!"".equals(username.trim())) {
+                    //title是空，username不是空
+                    //获取查到用户列表
+                    List<User> userList = userDao.queryByName(username);
+                    req.setAttribute("userList",userList);
+                    //获取查到博文列表
+                    List<Article> articleList = articleDao.queryByUsername(username);
+                    req.setAttribute("articleList",articleList);
+
+                    req.getRequestDispatcher("/WEB-INF/jsps/query.jsp").forward(req,resp);
+                } else {
+                    //title，username都是空
+                    resp.sendRedirect("/home");
+                }
             } else if (action.trim().equals("detail")) {
                 //进入博文详情页面
                 //获取博文id
@@ -58,7 +91,7 @@ public class HomeServlet extends HttpServlet {
                 view.forward(req, resp);
             }
         } else {
-            //第一次访问home页面
+            //不带属性访问home页面
             //获取所有博文列表
             List<Article> articleList = articleDao.queryAll();
             //设置请求属性list，在home页面获取
