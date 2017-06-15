@@ -50,7 +50,7 @@ public class UserServlet extends HttpServlet {
                     //根据用户名获得博文
                     List<Article> myArticles = articleDao.queryByUsername(user.getUsername());
                     //会话范围设置myArticles属性
-                    session.setAttribute("myArticles",myArticles);
+                    session.setAttribute("myArticles", myArticles);
                     req.getRequestDispatcher("WEB-INF/jsps/user.jsp").forward(req, resp);
                 } else {
                     //当前会话不存在user属性，获取登录页面的参数
@@ -72,7 +72,7 @@ public class UserServlet extends HttpServlet {
                         //根据用户名获得博文
                         List<Article> myArticles = articleDao.queryByUsername(user.getUsername());
                         //会话范围设置myArticles属性
-                        session.setAttribute("myArticles",myArticles);
+                        session.setAttribute("myArticles", myArticles);
                         //转发到用户个人信息页面user.jsp
                         req.getRequestDispatcher("/WEB-INF/jsps/user.jsp").forward(req, resp);
                     }
@@ -88,43 +88,39 @@ public class UserServlet extends HttpServlet {
                 //重定向到主页
                 resp.sendRedirect("/home");
             } else if (action.trim().equals("add")) {
-                //如果直接通过url访问/user?actoin=add 重定向到登录界面
-                if (user == null){
-                    resp.sendRedirect("/home?action=login");
-                }else {
-                    //注册添加用户
-                    //获取参数
-                    String username = req.getParameter("username");
-                    String password = req.getParameter("password");
-                    String sex = req.getParameter("sex");
-                    String telephone = req.getParameter("telephone");
-                    User newUser = new User(username, password, Integer.parseInt(sex), Long.parseLong(telephone));
-                    //执行数据库添加操作，返回影响的行数
-                    int x = userDao.insertUser(newUser);
-                    if (x > 0) {
-                        //添加成功
-                        //session = req.getSession();
-                        session.setAttribute("user", newUser);
-                        //转发到用户个人信息页面user.jsp
-                        req.getRequestDispatcher("/WEB-INF/jsps/user.jsp").forward(req, resp);
-                    } else {
-                        //添加失败
-                        //用户名已存在，抛出异常
-                        req.setAttribute("repeat", true);
-                        //转发到注册界面
-                        req.getRequestDispatcher("/WEB-INF/jsps/register.jsp").forward(req, resp);
-                    }
+                //注册添加用户
+                //获取参数
+                String username = req.getParameter("username");
+                String password = req.getParameter("password");
+                String sex = req.getParameter("sex");
+                String telephone = req.getParameter("telephone");
+                User newUser = new User(username, password, Integer.parseInt(sex), Long.parseLong(telephone));
+                //执行数据库添加操作，返回影响的行数
+                int x = userDao.insertUser(newUser);
+                if (x > 0) {
+                    //添加成功
+                    session.setAttribute("user", newUser);
+                    //转发到用户个人信息页面user.jsp
+//                    req.getRequestDispatcher("/WEB-INF/jsps/user.jsp").forward(req, resp);
+                    resp.sendRedirect("/user");
+                } else {
+                    //添加失败
+                    //用户名已存在，抛出异常
+                    req.setAttribute("repeat", true);
+                    //转发到注册界面
+                    req.getRequestDispatcher("/WEB-INF/jsps/register.jsp").forward(req, resp);
                 }
+
             } else if (action.trim().equals("change")) {
                 //修改个人信息
                 if (user == null) {
                     //如果未登录，重定向到登录界面
-                    resp.sendRedirect("/user?action=logOn");
+                    resp.sendRedirect("/home?action=login");
                 } else {
                     //已登录，转发到修改用户信息页面changeUser.jsp
-                    req.getRequestDispatcher("/WEB-INF/jsps/changeUser.jsp").forward(req,resp);
+                    req.getRequestDispatcher("/WEB-INF/jsps/changeUser.jsp").forward(req, resp);
                 }
-            }else if (action.trim().equals("update")){
+            } else if (action.trim().equals("update")) {
                 //更新用户信息
                 if (user == null) {
                     //未登录，重定向到登录界面
@@ -140,61 +136,72 @@ public class UserServlet extends HttpServlet {
                     String sex = req.getParameter("sex");
                     String telephone = req.getParameter("telephone");
                     //判断是否修改手机号，不修改则与原来相同
-                    if ("".equals(telephone.trim())){
+                    if ("".equals(telephone.trim())) {
                         telephone = String.valueOf(oldTelephone);
                     }
                     //判断是否修改用户名，不修改则与原来相同
-                    if ("".equals(username)){
+                    if ("".equals(username)) {
                         username = oldUsername;
                     }
                     //判断是否修改性别
-                    if (Integer.parseInt(sex) != oldSex){
+                    if (Integer.parseInt(sex) != oldSex) {
                         //执行数据库修改性别方法
-                        int x = userDao.updateUserSex(oldUsername,Integer.parseInt(sex));
-                        if (x > 0){
+                        int x = userDao.updateUserSex(oldUsername, Integer.parseInt(sex));
+                        if (x > 0) {
                             //更新当前user属性的性别
                             user.setSex(Integer.parseInt(sex));
                         }
                     }
                     //判断是否修改手机号
-                    if (Long.parseLong(telephone) != oldTelephone){
+                    if (Long.parseLong(telephone) != oldTelephone) {
                         //执行数据库修改手机号方法
-                        int x = userDao.updateUserTelephone(oldUsername,Long.parseLong(telephone));
-                        if (x > 0){
+                        int x = userDao.updateUserTelephone(oldUsername, Long.parseLong(telephone));
+                        if (x > 0) {
                             //更新当前user属性的手机号
                             user.setTelephone(Long.parseLong(telephone));
                         }
                     }
                     //判断是否修改用户名
-                    if (!username.equals(oldUsername)){
+                    if (!username.equals(oldUsername)) {
                         //执行修改用户名方法
-                        int x = userDao.updateUserUsername(oldUsername,username);
-                        if (x > 0){
+                        int x = userDao.updateUserUsername(oldUsername, username);
+                        if (x > 0) {
                             //更新数据库博文表对应博文的作者用户名
-                            int y = articleDao.updateArticleAuthor(oldUsername,username);
-                            if (y > 0){
+                            int y = articleDao.updateArticleAuthor(oldUsername, username);
+                            if (y > 0) {
                                 //根据用户名获得博文
                                 List<Article> myArticles = articleDao.queryByUsername(username);
                                 //会话范围设置myArticles属性
-                                session.setAttribute("myArticles",myArticles);
+                                session.setAttribute("myArticles", myArticles);
                             }
                             //更新当前user属性的用户名
                             user.setUsername(username);
-                        }else {
+                        } else {
                             //修改失败
                             //用户名已存在，抛出异常
-                            req.setAttribute("repeat",true);
-                            req.getRequestDispatcher("WEB-INF/jsps/changeUser.jsp").forward(req,resp);
+                            req.setAttribute("repeat", true);
+                            req.getRequestDispatcher("WEB-INF/jsps/changeUser.jsp").forward(req, resp);
                         }
                     }
                     //转发到用户个人信息页面user.jsp
-                    req.getRequestDispatcher("/WEB-INF/jsps/user.jsp").forward(req,resp);
+                    req.getRequestDispatcher("/WEB-INF/jsps/user.jsp").forward(req, resp);
                 }
             }
-        }else {
+        } else {
             //直接访问/user
-            //转发到登录页面
-            req.getRequestDispatcher("/WEB-INF/jsps/login.jsp").forward(req,resp);
+            if (user != null) {
+                //已登录
+                //根据用户名获得博文
+                List<Article> myArticles = articleDao.queryByUsername(user.getUsername());
+                //会话范围设置myArticles属性
+                session.setAttribute("myArticles", myArticles);
+                //转发到个人信息页面
+                req.getRequestDispatcher("/WEB-INF/jsps/user.jsp").forward(req, resp);
+            } else {
+                //未登录
+                //转发到登录页面
+                resp.sendRedirect("/home?action=login");
+            }
         }
     }
 }

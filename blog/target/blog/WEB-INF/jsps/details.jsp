@@ -10,14 +10,33 @@
 <html>
 <head>
     <title>Title</title>
+    <script type="text/javascript">
+        function deleteCheck() {
+            if (confirm("确定删除吗")){
+                window.location.href="/article?action=delete&articleId=${article.id}";
+            }
+        }
+    </script>
 </head>
 <body>
-标题：${article.title}
-<br/>
-正文：${article.content}
-<br/>
-作者：${article.username}
-<br/>
-日期：${article.date}
+<div style="margin-top: 50px; text-align: center">
+    <h1>${article.title}</h1>
+    <div>
+        <a href="/home">返回首页</a>
+        <c:if test="${user.username eq article.username}">
+        <a href="/article?action=change&articleId=${article.id}">编辑</a>
+        <span onclick="deleteCheck()" style="cursor: pointer; text-decoration: underline; color: blue;">删除</span>
+        </c:if>
+    </div>
+    <div style="border: solid;margin-left: 25%;margin-right: 25%; margin-top:20px;height: 200px">
+        ${article.content}
+    </div>
+    <div style="margin-top: 20px">
+    作者：${article.username}
+    </div>
+    <div>
+    日期：${article.date}
+    </div>
+</div>
 </body>
 </html>

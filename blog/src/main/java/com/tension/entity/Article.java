@@ -13,6 +13,16 @@ public class Article {
     private Date date;
     private String username;
 
+    public Article(String title, String content, Date date, String username) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.username = username;
+    }
+
+    public Article() {
+    }
+
     public int getId() {
         return id;
     }

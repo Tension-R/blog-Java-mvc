@@ -66,10 +66,16 @@
         <td align="center">
             <button onclick="location.href='/home'">返回主页</button>
         </td>
+        <td align="center">
+            <button onclick="location.href='/user?action=quit'">退出</button>
+        </td>
     </tr>
 </table>
 <h2 align="center">我的博文</h2>
 <div align="center">
+    <a href="/article?action=add">新建博文</a>
+</div>
+<div align="center" style="margin-top: 20px">
     <table style="text-align: center; border : solid">
         <tr>
             <td class="blogTable">文章编号</td>

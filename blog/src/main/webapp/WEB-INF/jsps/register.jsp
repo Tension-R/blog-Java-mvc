@@ -16,9 +16,15 @@
                 alert("用户名已存在");
             }
         }
+        function checkFlag() {
+            var flag = ${flag};
+            if (!flag){
+                alert("注册成功");
+            }
+        }
     </script>
 </head>
-<body onload="checkRepeat()" >
+<body onload="checkRepeat(); checkFlag()">
 <h1 style="text-align: center;">注册用户</h1>
 <form action="/user?action=add" method="post">
     <table align="center">

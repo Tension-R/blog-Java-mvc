@@ -91,7 +91,7 @@ public class HomeServlet extends HttpServlet {
                 view.forward(req, resp);
             }
         } else {
-            //不带属性访问home页面
+            //直接访问/user
             //获取所有博文列表
             List<Article> articleList = articleDao.queryAll();
             //设置请求属性list，在home页面获取
